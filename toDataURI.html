@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<script>
+			//simplified from http://appcropolis.com/blog/web-technology/javascript-encode-images-dataurl/
+			//returns the images URI using the input url specifying where the image is located.
+			var getImageURI = function(url, finished) {
+				console.log(url);
+				var data;
+				var img = new Image();
+				img.src = url;
+				img.onload = function() {
+					console.log(img)
+					var canvas = document.createElement('canvas');
+					canvas.width = img.width;
+					canvas.height = img.height;
+					//get 2d context and draw image.
+					var ctx = canvas.getContext("2d");
+
+					ctx.drawImage(img, 0, 0);
+					//get canvas data URL
+					data = canvas.toDataURL();
+					finished(canvas.toDataURL());
+				}
+			};
+
+			var getURLOnClick = function () {
+				var imgURL = document.getElementById('file').value;
+				var afterFinish = function(data) {
+					document.getElementById('out').value = data; //you can set the image URI to any object here!
+				};
+				getImageURI(imgURL, afterFinish);
+			}
+
+		</script>
+	</head>
+	<body>
+		<input id="file" type="text" value="image path">
+		<input id="out" type="text" value="image URI" >
+		<button type="button" onclick="getURLOnClick()">Submit</button>
+	</body>
+</html>
